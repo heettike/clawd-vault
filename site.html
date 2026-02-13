@@ -185,7 +185,7 @@ footer a { font-size: 12px; }
 <section>
   <h2>what</h2>
   <p>a chrome extension that saves links, selected text, and notes directly to your AI agent's memory. your agent remembers everything you save — no copy-pasting, no bookmarks folder you'll never open again.</p>
-  <p>backend is <a href="https://github.com/openclaw/openclaw">openclaw</a>, an open source AI agent platform.</p>
+  <p>backend is <a href="https://github.com/heettike/clawd-vault">openclaw</a>, an open source AI agent platform.</p>
 </section>
 
 <section>
@@ -194,7 +194,7 @@ footer a { font-size: 12px; }
     <li><kbd>cmd+shift+v</kbd> overlay — quick save from any page</li>
     <li>select text on any page, save it with context</li>
     <li>add notes to any saved link</li>
-    <li>7 categories: general, read-later, reference, project, inspiration, tools, archive</li>
+    <li>7 categories: writing, design, code, ideas, knowledge, edit, film</li>
     <li>search popup — find anything you've saved</li>
     <li>right-click context menu on pages, links, images</li>
     <li>your agent can search and recall saved links on demand</li>
@@ -215,15 +215,15 @@ footer a { font-size: 12px; }
   <div class="install-box">
     <h3>option 1: tell your agent</h3>
     <p>send this to your openclaw agent and it handles the rest:</p>
-    <div class="code-block"><code>install clawd vault from https://github.com/openclaw/openclaw/tree/main/skills/vault</code></div>
+    <div class="code-block"><code>install clawd vault from https://github.com/heettike/clawd-vault</code></div>
     <p class="dim">your agent will clone the skill, start the backend, and give you the extension to load.</p>
   </div>
 
   <div class="install-box">
     <h3>option 2: manual</h3>
     <div class="code-block"><code><span class="dim"># clone the skill</span>
-git clone https://github.com/openclaw/openclaw.git
-cd openclaw/skills/vault
+git clone https://github.com/heettike/clawd-vault.git
+cd clawd-vault
 
 <span class="dim"># install deps + start backend</span>
 pip install flask flask-cors requests
@@ -247,7 +247,7 @@ GET  /api/health    <span class="dim">— health check</span></code></div>
 
 <section>
   <h2>source</h2>
-  <p><a href="https://github.com/openclaw/openclaw">github.com/openclaw/openclaw</a></p>
+  <p><a href="https://github.com/heettike/clawd-vault">github.com/openclaw/openclaw</a></p>
   <p class="dim">MIT license. do whatever you want.</p>
 </section>
 
@@ -263,7 +263,7 @@ GET  /api/health    <span class="dim">— health check</span></code></div>
 AGENT INSTALL INSTRUCTIONS FOR CLAWD VAULT:
 
 1. Clone or download the vault skill files from:
-   https://github.com/openclaw/openclaw/tree/main/skills/vault
+   https://github.com/heettike/clawd-vault
 
 2. Install Python dependencies:
    pip install --break-system-packages flask flask-cors requests
