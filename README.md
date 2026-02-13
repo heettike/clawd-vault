@@ -1,72 +1,104 @@
 # clawd vault
 
-a chrome extension that saves links to your ai agent's memory via [openclaw](https://openclaw.com).
+a chrome extension that saves links directly to your ai agent's memory via [openclaw](https://openclaw.com).
 
-no databases. no cloud accounts. your links go straight to your agent — who can remember, search, and reason about everything you save.
+no cloud accounts. no bookmarks folder you'll never open. links go straight to your agent — who can remember, search, and reason about everything you save.
 
-## what it does
+## features
 
-- **save any page** with `cmd+shift+v` (or `ctrl+shift+v`)
-- **add context** — write a note, select a category, highlight text before saving
-- **search your vault** from the popup
-- **right-click to save** any link, image, or selection
-- categories: writing, design, code, ideas, knowledge, edit, film
-
-## how it works
-
-1. you save a link from the extension
-2. the link is stored locally in the extension + sent to your openclaw gateway
-3. your openclaw agent receives it and stores it in its memory
-4. ask your agent "what design links did i save?" and it knows
+- **click the icon** — opens the vault popup. search and browse all saved links
+- **cmd+shift+v** — overlay for adding notes + picking a category before saving
+- **right-click** — quick save any link, image, or selection. or save with a note
+- **7 categories** — writing, design, code, ideas, knowledge, edit, film (editable)
+- **search** — filter your vault from the popup, instant results
+- **dark theme** — monospace, lowercase, sharp edges, `#0a0a0a` background
 
 ## install
 
-1. clone or download this repo
-2. open `chrome://extensions` → enable developer mode
-3. click "load unpacked" → select the `extension/` folder
-4. click the extension icon → right-click → options
-5. enter your openclaw gateway url and token
-6. copy `vault-skill/SKILL.md` into your openclaw workspace skills
+1. clone this repo
 
-## design
+```
+git clone https://github.com/heettike/clawd-vault.git
+cd clawd-vault
+```
 
-dark theme. monospace. lowercase. sharp edges. no rounded corners. no emojis. `#0a0a0a` background.
+2. open `chrome://extensions` in your browser
 
-## icons
+3. enable **developer mode** (toggle in the top right)
 
-you'll need to provide your own icon files in the extension folder:
-- `icon16.png` (16x16)
-- `icon48.png` (48x48)
-- `icon128.png` (128x128)
+4. click **load unpacked** and select the `extension/` folder
 
-a simple white glyph on transparent background works well.
+5. pin the extension to your toolbar (click the puzzle icon, then the pin)
+
+6. right-click the extension icon > **options** to enter your openclaw gateway url and token
+
+7. done. click the icon to open your vault, or press `cmd+shift+v` to save with notes
+
+## how it works
+
+```
+you save a link
+  -> stored locally in chrome.storage
+  -> synced to your openclaw gateway (fire-and-forget)
+     -> your agent receives [vault:save] messages
+     -> agent can search, recall, reason about saved links
+```
+
+the extension works offline. saves are stored locally first. if your gateway is down, you still have your links. gateway sync happens in the background.
+
+## usage
+
+| action | what happens |
+|--------|-------------|
+| click icon | opens vault popup (search + browse) |
+| cmd+shift+v | overlay — add note, pick category, save |
+| right-click > save to vault | instant save, no prompt |
+| right-click > save + add note | opens overlay for notes |
+
+## openclaw integration
+
+the extension sends structured messages to your openclaw gateway:
+
+```
+[vault:save]
+url: https://example.com/article
+title: some article title
+category: knowledge
+note: interesting take on distributed systems
+saved: 2025-02-13T21:00:00.000Z
+```
+
+your agent receives these via the gateway's message api. add a vault skill to your agent's workspace to enable search and recall:
+
+```
+"what design links did i save last week?"
+"find that article about distributed systems"
+"summarize everything in my code category"
+```
+
+## configuration
+
+open the extension options page (right-click icon > options) to set:
+
+- **gateway url** — your openclaw gateway endpoint (e.g. `https://your-gateway.example.com`)
+- **api token** — if your gateway requires authentication
 
 ## architecture
 
 ```
-extension (chrome)
-  ├── saves locally (chrome.storage.local)
-  └── syncs to openclaw gateway (POST /api/v1/message)
-
-openclaw agent
-  ├── receives vault:save messages
-  ├── stores in vault/items.jsonl
-  └── can search + recall on demand
+extension (chrome, manifest v3)
+  |-- popup.html/js     vault browser + search
+  |-- overlay.js        save overlay (notes + categories)
+  |-- background.js     context menus, shortcuts, gateway sync
+  |-- options.html/js   gateway configuration
+  |
+  |-- chrome.storage.local   (primary store, works offline)
+  |-- openclaw gateway       (async sync, fire-and-forget)
 ```
 
-the extension works offline — saves are stored locally first. gateway sync is fire-and-forget. if your gateway is down, you still have your links.
+## design
 
-## future ideas
-
-- [ ] export vault as json/csv
-- [ ] auto-categorize using the agent's llm
-- [ ] tag pages with multiple labels
-- [ ] "save and summarize" — agent reads the page content and stores a summary
-- [ ] vault dashboard — a full-page view of all saved items with filters
-- [ ] import from pocket/raindrop/bookmarks
-- [ ] sync vault back from agent to extension (bidirectional)
-- [ ] share collections — export a category as a shareable link list
-- [ ] "why did i save this?" — agent adds its own context based on your browsing patterns
+dark theme. monospace. lowercase. sharp edges. no rounded corners. `#0a0a0a` background. no emojis.
 
 ## license
 

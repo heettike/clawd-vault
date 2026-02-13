@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "clawd vault",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "save links to your openclaw agent's memory",
   "permissions": ["contextMenus", "activeTab", "storage", "scripting"],
   "host_permissions": ["<all_urls>"],

@@ -2,12 +2,6 @@ const list = document.getElementById("list");
 const countEl = document.getElementById("count");
 const searchBox = document.getElementById("search-box");
 const saveBtn = document.getElementById("save-btn");
-const setupBanner = document.getElementById("setup-banner");
-
-// check config
-chrome.runtime.sendMessage({ action: "checkConfig" }, (resp) => {
-  if (!resp?.configured) setupBanner.style.display = "block";
-});
 
 function renderItems(items) {
   if (!items || items.length === 0) {
@@ -15,11 +9,11 @@ function renderItems(items) {
     return;
   }
   list.innerHTML = items.map(i => {
-    const date = new Date(i.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const date = new Date(i.timestamp || i.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
     const tag = i.category ? `<span class="item-tag">${i.category}</span>` : "";
     const note = i.note ? `<div class="item-note">${i.note}</div>` : "";
-    return `<div class="item" data-url="${escHtml(i.url)}">
-      <div class="item-title">${escHtml((i.title || i.url).toLowerCase())}</div>
+    return `<div class="item" data-url="${i.url}">
+      <div class="item-title">${(i.title || i.url).toLowerCase()}</div>
       ${note}
       <div class="item-meta"><span class="item-date">${date}</span>${tag}</div>
     </div>`;
@@ -29,18 +23,38 @@ function renderItems(items) {
   });
 }
 
-function escHtml(s) {
-  const d = document.createElement("div");
-  d.textContent = s || "";
-  return d.innerHTML;
-}
+let currentOffset = 0;
+let allItems = [];
 
 function loadRecent(limit = 50) {
   chrome.runtime.sendMessage({ action: "getRecent", limit }, (resp) => {
-    const items = resp?.items || [];
-    renderItems(items);
-    if (resp?.total !== undefined) countEl.textContent = `${resp.total} saved`;
+    allItems = resp?.items || [];
+    currentOffset = allItems.length;
+    renderItems(allItems);
+    if (resp?.total !== undefined) {
+      countEl.textContent = `${resp.total} saved`;
+      if (resp.total > allItems.length) {
+        showLoadMore(resp.total);
+      }
+    }
   });
+}
+
+function showLoadMore(total) {
+  const existing = document.getElementById("load-more");
+  if (existing) existing.remove();
+  const btn = document.createElement("div");
+  btn.id = "load-more";
+  btn.style.cssText = "padding:10px 16px;text-align:center;color:#444;font-size:10px;cursor:pointer;border-top:1px solid #111";
+  btn.textContent = `showing ${allItems.length} of ${total} — tap to load more`;
+  btn.addEventListener("click", () => {
+    chrome.runtime.sendMessage({ action: "getRecent", limit: total }, (resp) => {
+      allItems = resp?.items || [];
+      renderItems(allItems);
+      btn.remove();
+    });
+  });
+  list.appendChild(btn);
 }
 
 let searchTimeout;
