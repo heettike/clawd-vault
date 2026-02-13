@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>clawd vault — save links to your agent's memory</title>
+<meta name="description" content="chrome extension that saves links, text, and notes directly to your AI agent's memory. powered by openclaw.">
+<meta property="og:title" content="clawd vault">
+<meta property="og:description" content="save links to your AI agent's memory. chrome extension + openclaw skill.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vault.openclaw.ai">
+<meta property="og:image" content="https://vault.openclaw.ai/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="clawd vault">
+<meta name="twitter:description" content="save links to your AI agent's memory.">
+<meta name="twitter:image" content="https://vault.openclaw.ai/og.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --fg: #e0e0e0;
+  --dim: #666;
+  --accent: #fff;
+  --border: #1a1a1a;
+  --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--dim); }
+a:hover { color: #fff; border-color: #fff; }
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 80px 24px 120px;
+}
+
+header {
+  margin-bottom: 80px;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  color: var(--accent);
+}
+
+.tagline {
+  color: var(--dim);
+  font-size: 14px;
+}
+
+section {
+  margin-bottom: 64px;
+}
+
+h2 {
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--dim);
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+p {
+  margin-bottom: 16px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  padding: 6px 0;
+  color: var(--fg);
+}
+
+ul li::before {
+  content: '- ';
+  color: var(--dim);
+}
+
+.code-block {
+  background: #111;
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.code-block code {
+  color: var(--fg);
+}
+
+.dim { color: var(--dim); }
+.accent { color: var(--accent); }
+
+kbd {
+  background: #111;
+  border: 1px solid #333;
+  padding: 2px 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.install-box {
+  border: 1px solid #333;
+  padding: 32px;
+  margin: 24px 0;
+  position: relative;
+}
+
+.install-box h3 {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.install-box p {
+  font-size: 13px;
+}
+
+.copy-btn {
+  background: #fff;
+  color: #0a0a0a;
+  border: none;
+  padding: 8px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: opacity 0.2s;
+}
+
+.copy-btn:hover { opacity: 0.8; }
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 64px 0;
+}
+
+footer {
+  color: var(--dim);
+  font-size: 12px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+footer a { font-size: 12px; }
+
+/* agent-readable install instructions (hidden visually, parseable) */
+.agent-instructions {
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1>clawd vault</h1>
+  <p class="tagline">save links to your agent's memory</p>
+</header>
+
+<section>
+  <h2>what</h2>
+  <p>a chrome extension that saves links, selected text, and notes directly to your AI agent's memory. your agent remembers everything you save — no copy-pasting, no bookmarks folder you'll never open again.</p>
+  <p>backend is <a href="https://github.com/openclaw/openclaw">openclaw</a>, an open source AI agent platform.</p>
+</section>
+
+<section>
+  <h2>features</h2>
+  <ul>
+    <li><kbd>cmd+shift+v</kbd> overlay — quick save from any page</li>
+    <li>select text on any page, save it with context</li>
+    <li>add notes to any saved link</li>
+    <li>7 categories: general, read-later, reference, project, inspiration, tools, archive</li>
+    <li>search popup — find anything you've saved</li>
+    <li>right-click context menu on pages, links, images</li>
+    <li>your agent can search and recall saved links on demand</li>
+  </ul>
+</section>
+
+<section>
+  <h2>how it works</h2>
+  <p>the extension talks to a lightweight python server running alongside your openclaw agent. when you save a link, it goes into a local sqlite database and a markdown log your agent reads.</p>
+  <p>ask your agent "what did i save about X?" and it searches your vault.</p>
+</section>
+
+<hr class="divider">
+
+<section>
+  <h2>install</h2>
+
+  <div class="install-box">
+    <h3>option 1: tell your agent</h3>
+    <p>send this to your openclaw agent and it handles the rest:</p>
+    <div class="code-block"><code>install clawd vault from https://github.com/openclaw/openclaw/tree/main/skills/vault</code></div>
+    <p class="dim">your agent will clone the skill, start the backend, and give you the extension to load.</p>
+  </div>
+
+  <div class="install-box">
+    <h3>option 2: manual</h3>
+    <div class="code-block"><code><span class="dim"># clone the skill</span>
+git clone https://github.com/openclaw/openclaw.git
+cd openclaw/skills/vault
+
+<span class="dim"># install deps + start backend</span>
+pip install flask flask-cors requests
+python3 server.py
+
+<span class="dim"># load extension in chrome</span>
+<span class="dim"># 1. open chrome://extensions</span>
+<span class="dim"># 2. enable developer mode</span>
+<span class="dim"># 3. load unpacked -> select extension/</span></code></div>
+  </div>
+</section>
+
+<section>
+  <h2>api</h2>
+  <div class="code-block"><code>POST /api/save      <span class="dim">— save a link (url, title, selected_text, notes, category)</span>
+GET  /api/list      <span class="dim">— recent items (?limit=20)</span>
+GET  /api/search    <span class="dim">— search saved items (?q=term)</span>
+GET  /api/health    <span class="dim">— health check</span></code></div>
+  <p class="dim">default port: 9877</p>
+</section>
+
+<section>
+  <h2>source</h2>
+  <p><a href="https://github.com/openclaw/openclaw">github.com/openclaw/openclaw</a></p>
+  <p class="dim">MIT license. do whatever you want.</p>
+</section>
+
+<footer>
+  <p>built on <a href="https://docs.openclaw.ai">openclaw</a></p>
+</footer>
+
+</div>
+
+<!-- agent-parseable install instructions -->
+<div class="agent-instructions" data-agent="true">
+<!--
+AGENT INSTALL INSTRUCTIONS FOR CLAWD VAULT:
+
+1. Clone or download the vault skill files from:
+   https://github.com/openclaw/openclaw/tree/main/skills/vault
+
+2. Install Python dependencies:
+   pip install --break-system-packages flask flask-cors requests
+
+3. Start the backend server:
+   cd <skill-directory>/vault
+   python3 server.py
+   (runs on port 9877)
+
+4. The Chrome extension is in the extension/ subdirectory.
+   User must manually load it via chrome://extensions > Developer Mode > Load Unpacked.
+
+5. Verify with: curl http://localhost:9877/api/health
+
+SKILL STRUCTURE:
+- server.py        — Flask backend, SQLite storage
+- vault.db         — auto-created database
+- extension/       — Chrome extension (Manifest V3)
+  - manifest.json
+  - background.js
+  - popup.html / popup.js
+  - overlay.js
+  - icon16/48/128.png
+-->
+</div>
+
+</body>
+</html>

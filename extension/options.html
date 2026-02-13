@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0a0a; color: #fff; min-height: 100vh;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 12px; display: flex; align-items: center; justify-content: center;
+}
+.container { width: 400px; }
+h1 { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; color: #fff; margin-bottom: 8px; }
+.sub { color: #333; font-size: 10px; margin-bottom: 32px; }
+label { display: block; color: #444; font-size: 9px; letter-spacing: 0.5px; margin-bottom: 8px; }
+input {
+  width: 100%; background: #0f0f0f; border: 1px solid #1a1a1a;
+  color: #fff; font-family: inherit; font-size: 11px;
+  padding: 10px 12px; outline: none; margin-bottom: 20px;
+  transition: border-color 0.15s;
+}
+input::placeholder { color: #2a2a2a; }
+input:focus { border-color: #333; }
+.hint { color: #222; font-size: 9px; margin-top: -14px; margin-bottom: 20px; }
+button {
+  padding: 10px 28px; font-size: 11px; font-family: inherit;
+  background: #fff; color: #0a0a0a; border: 1px solid #fff;
+  cursor: pointer; text-transform: lowercase; font-weight: 500;
+  transition: all 0.12s;
+}
+button:hover { background: #e0e0e0; border-color: #e0e0e0; }
+#status { color: #444; font-size: 10px; margin-top: 12px; min-height: 16px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>clawd vault</h1>
+  <div class="sub">connect to your openclaw gateway</div>
+
+  <label>gateway url</label>
+  <input type="text" id="url" placeholder="https://your-gateway.example.com" />
+  <div class="hint">the url where your openclaw gateway is running</div>
+
+  <label>api token (optional)</label>
+  <input type="password" id="token" placeholder="your gateway token" />
+  <div class="hint">if your gateway requires authentication</div>
+
+  <button id="save">save</button>
+  <div id="status"></div>
+</div>
+<script src="options.js"></script>
+</body>
+</html>
