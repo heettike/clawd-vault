@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 100%; min-height: 100%; max-height: 100%;
+  margin: 0; background: #0a0a0a; color: #fff;
+  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 11px; overflow: hidden; display: flex; flex-direction: column;
+}
+
+/* header */
+#header {
+  padding: 14px 16px 12px; display: flex;
+  justify-content: space-between; align-items: baseline;
+  border-bottom: 1px solid #161616;
+}
+#header h1 { font-size: 12px; font-weight: 500; letter-spacing: 1.5px; color: #fff; }
+#count { color: #444; font-size: 9px; letter-spacing: 0.5px; }
+
+/* save button */
+#save-btn {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 11px 16px;
+  background: #0a0a0a; border: none; border-bottom: 1px solid #161616;
+  color: #666; font-family: inherit; font-size: 11px;
+  cursor: pointer; text-align: left; transition: all 0.15s;
+}
+#save-btn:hover { background: #111; color: #fff; }
+#save-btn .icon {
+  width: 18px; height: 18px; border: 1px solid #333;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #555; line-height: 1; flex-shrink: 0;
+}
+#save-btn:hover .icon { border-color: #666; color: #fff; }
+#save-btn .label { flex: 1; }
+#save-btn .shortcut { color: #333; font-size: 9px; }
+
+/* search */
+#search-wrap {
+  position: relative; border-bottom: 1px solid #161616;
+}
+#search-box {
+  width: 100%; padding: 10px 16px 10px 32px;
+  background: transparent; border: none;
+  color: #fff; font-family: inherit; font-size: 11px; outline: none;
+}
+#search-box::placeholder { color: #2a2a2a; }
+#search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: #2a2a2a; font-size: 10px; pointer-events: none;
+}
+
+/* list */
+#list { flex: 1; overflow-y: auto; }
+#list::-webkit-scrollbar { width: 3px; }
+#list::-webkit-scrollbar-track { background: transparent; }
+#list::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+.item {
+  padding: 10px 16px; cursor: pointer;
+  border-bottom: 1px solid #0f0f0f; transition: background 0.1s;
+}
+.item:hover { background: #111; }
+.item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.item-delete {
+  background: none; border: none; color: #222; font-size: 14px; cursor: pointer;
+  font-family: inherit; padding: 0; line-height: 1; flex-shrink: 0;
+}
+.item:hover .item-delete { color: #444; }
+.item-delete:hover { color: #ff4444 !important; }
+.item-title {
+  color: #bbb; font-size: 11px; text-transform: lowercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.4;
+}
+.item:hover .item-title { color: #fff; }
+.item-note {
+  color: #444; font-size: 10px; margin-top: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-style: italic;
+}
+.item-meta {
+  display: flex; gap: 8px; margin-top: 4px; align-items: center;
+}
+.item-date { color: #333; font-size: 9px; }
+.item-tag {
+  color: #444; font-size: 9px; padding: 1px 6px;
+  background: #111; border: 1px solid #1a1a1a;
+}
+
+.empty {
+  padding: 60px 16px; color: #555; text-align: center;
+  font-size: 11px; letter-spacing: 0.5px;
+}
+</style>
+</head>
+<body>
+<div id="header">
+  <div>
+    <h1>clawd vault</h1>
+    <p style="color:#444;font-size:9px;margin-top:2px;letter-spacing:0.5px">save links for your openclaw to remember</p>
+  </div>
+  <span id="count"></span>
+</div>
+<button id="save-btn">
+  <span class="icon">+</span>
+  <span class="label">click my icon to save this page</span>
+  <span class="shortcut">&#8984;&#8679;v</span>
+</button>
+<div id="search-wrap">
+  <span id="search-icon">/</span>
+  <input id="search-box" type="text" placeholder="search vault..." />
+</div>
+<div id="list"><div class="empty">loading...</div></div>
+<script src="popup.js"></script>
+</body>
+</html>
